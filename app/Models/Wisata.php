@@ -15,13 +15,21 @@ class Wisata extends Model
         'deskripsi',
         'lokasi',
         'gambar'
+        // HAPUS fasilitas, keindahan, harga_tiket karena pindah ke tabel penilaian
     ];
 
-    /**
-     * Relasi ke tabel penilaian
-     */
     public function penilaians(): HasMany
     {
         return $this->hasMany(Penilaian::class);
+    }
+
+    // Helper untuk mendapatkan nilai kriteria tertentu
+    public function getNilaiKriteria($kriteriaKode)
+    {
+        $kriteria = Kriteria::where('kode_kriteria', $kriteriaKode)->first();
+        if (!$kriteria) return null;
+
+        $penilaian = $this->penilaians()->where('kriteria_id', $kriteria->id)->first();
+        return $penilaian ? $penilaian->nilai : null;
     }
 }

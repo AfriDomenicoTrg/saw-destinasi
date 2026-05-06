@@ -14,6 +14,11 @@ class LoginController extends Controller
      */
     public function showLoginForm()
     {
+        // If already logged in as admin, redirect to dashboard
+        if (Auth::check() && Auth::user()->isAdmin()) {
+            return redirect()->route('admin.dashboard');
+        }
+
         return view('auth.login');
     }
 
@@ -45,11 +50,16 @@ class LoginController extends Controller
             if ($user->isAdmin()) {
                 // Admin can login
                 $request->session()->regenerate();
+
+                // Redirect to admin dashboard
                 return redirect()->intended(route('admin.dashboard'))
                     ->with('success', 'Selamat datang, ' . $user->name . '!');
             } else {
                 // User role cannot login
                 Auth::logout();
+                $request->session()->invalidate();
+                $request->session()->regenerateToken();
+
                 return redirect()->back()
                     ->withInput($request->only('email'))
                     ->withErrors(['email' => 'Akses ditolak. Hanya administrator yang diizinkan.']);

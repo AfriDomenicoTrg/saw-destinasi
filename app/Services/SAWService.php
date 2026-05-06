@@ -9,9 +9,52 @@ use App\Models\Penilaian;
 class SAWService
 {
     /**
-     * Hitung normalisasi matrix
+     * Get ranking rekomendasi wisata
      */
-    public function normalize($penilaians, $kriterias)
+    public function getRanking()
+    {
+        // Ambil semua data
+        $wisatas = Wisata::all();
+        $kriterias = Kriteria::all();
+        $penilaians = Penilaian::with(['wisata', 'kriteria'])->get();
+
+        if ($wisatas->isEmpty() || $kriterias->isEmpty() || $penilaians->isEmpty()) {
+            return [];
+        }
+
+        // 1. Normalisasi matrix
+        $normalized = $this->normalize($penilaians, $kriterias);
+
+        // 2. Hitung nilai preferensi
+        $preferences = $this->calculatePreference($normalized, $kriterias);
+
+        // 3. Buat ranking
+        $ranking = [];
+        foreach ($wisatas as $wisata) {
+            $ranking[] = [
+                'wisata' => $wisata,
+                'nilai' => $preferences[$wisata->id] ?? 0,
+                'normalized_values' => $normalized[$wisata->id] ?? []
+            ];
+        }
+
+        // Urutkan dari nilai tertinggi
+        usort($ranking, function ($a, $b) {
+            return $b['nilai'] <=> $a['nilai'];
+        });
+
+        // Tambahkan peringkat
+        foreach ($ranking as $index => $item) {
+            $ranking[$index]['rank'] = $index + 1;
+        }
+
+        return $ranking;
+    }
+
+    /**
+     * Normalisasi matrix
+     */
+    private function normalize($penilaians, $kriterias)
     {
         $normalized = [];
 
@@ -19,15 +62,17 @@ class SAWService
             // Ambil semua nilai untuk kriteria ini
             $nilaiAll = $penilaians->where('kriteria_id', $kriteria->id)->pluck('nilai')->toArray();
 
-            if ($kriteria->isBenefit()) {
+            if (empty($nilaiAll)) continue;
+
+            if ($kriteria->tipe === 'benefit') {
                 $max = max($nilaiAll);
                 foreach ($penilaians->where('kriteria_id', $kriteria->id) as $penilaian) {
-                    $normalized[$penilaian->wisata_id][$kriteria->id] = $penilaian->nilai / $max;
+                    $normalized[$penilaian->wisata_id][$kriteria->id] = $max > 0 ? $penilaian->nilai / $max : 0;
                 }
-            } else { // Cost
+            } else { // cost
                 $min = min($nilaiAll);
                 foreach ($penilaians->where('kriteria_id', $kriteria->id) as $penilaian) {
-                    $normalized[$penilaian->wisata_id][$kriteria->id] = $min / $penilaian->nilai;
+                    $normalized[$penilaian->wisata_id][$kriteria->id] = $penilaian->nilai > 0 ? $min / $penilaian->nilai : 0;
                 }
             }
         }
@@ -36,9 +81,9 @@ class SAWService
     }
 
     /**
-     * Hitung nilai preferensi (V) untuk setiap alternatif
+     * Hitung nilai preferensi
      */
-    public function calculatePreference($normalized, $kriterias)
+    private function calculatePreference($normalized, $kriterias)
     {
         $preferences = [];
 
@@ -54,41 +99,20 @@ class SAWService
     }
 
     /**
-     * Dapatkan ranking wisata berdasarkan SAW
+     * Get matrix penilaian untuk ditampilkan ke user
      */
-    public function getRanking()
+    public function getPenilaianMatrix()
     {
-        // Ambil semua data
         $wisatas = Wisata::all();
         $kriterias = Kriteria::all();
-        $penilaians = Penilaian::with(['wisata', 'kriteria'])->get();
-
-        // Hitung normalisasi
-        $normalized = $this->normalize($penilaians, $kriterias);
-
-        // Hitung preferensi
-        $preferences = $this->calculatePreference($normalized, $kriterias);
-
-        // Buat ranking
-        $ranking = [];
-        foreach ($wisatas as $wisata) {
-            $ranking[] = [
-                'wisata' => $wisata,
-                'nilai' => $preferences[$wisata->id] ?? 0,
-                'normalized_values' => $normalized[$wisata->id] ?? []
-            ];
-        }
-
-        // Urutkan dari nilai tertinggi ke terendah
-        usort($ranking, function ($a, $b) {
-            return $b['nilai'] <=> $a['nilai'];
+        $penilaians = Penilaian::all()->keyBy(function ($item) {
+            return $item->wisata_id . '_' . $item->kriteria_id;
         });
 
-        // Tambahkan peringkat
-        foreach ($ranking as $index => $item) {
-            $ranking[$index]['rank'] = $index + 1;
-        }
-
-        return $ranking;
+        return [
+            'wisatas' => $wisatas,
+            'kriterias' => $kriterias,
+            'penilaians' => $penilaians
+        ];
     }
 }

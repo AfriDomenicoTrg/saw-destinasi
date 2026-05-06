@@ -52,7 +52,18 @@
             font-family: 'Inter', sans-serif;
             background: #f4f6f9;
         }
+        .card-elegant {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
+    border: 1px solid rgba(0,0,0,0.05);
+}
 
+.card-elegant:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.1);
+}
         /* Custom Scrollbar */
         ::-webkit-scrollbar {
             width: 6px;
@@ -131,6 +142,60 @@
             color: #3b82f6 !important;
             border-right: 3px solid #3b82f6;
         }
+    body {
+        color: #1f2937;
+    }
+
+    /* Button premium style */
+    .btn-premium {
+        background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+        color: white;
+        transition: all 0.3s ease;
+    }
+
+    .btn-premium:hover {
+        background: linear-gradient(135deg, #1d4ed8 0%, #1e3a8a 100%);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+    }
+
+    /* Table styles */
+    .data-table th {
+        background: #f3f4f6;
+        color: #374151;
+        font-weight: 600;
+    }
+
+    .data-table td {
+        color: #4b5563;
+    }
+
+    /* Pagination styles */
+    .pagination {
+        display: flex;
+        gap: 5px;
+    }
+
+    .pagination a, .pagination span {
+        padding: 8px 12px;
+        border-radius: 8px;
+        color: #374151;
+        background: white;
+        border: 1px solid #e5e7eb;
+        transition: all 0.2s;
+    }
+
+    .pagination a:hover {
+        background: #eff6ff;
+        border-color: #3b82f6;
+        color: #2563eb;
+    }
+
+    .pagination .active span {
+        background: #3b82f6;
+        color: white;
+        border-color: #3b82f6;
+    }
     </style>
 
     @stack('styles')

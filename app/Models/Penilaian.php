@@ -19,17 +19,11 @@ class Penilaian extends Model
         'nilai' => 'float'
     ];
 
-    /**
-     * Relasi ke tabel wisata
-     */
     public function wisata(): BelongsTo
     {
         return $this->belongsTo(Wisata::class);
     }
 
-    /**
-     * Relasi ke tabel kriteria
-     */
     public function kriteria(): BelongsTo
     {
         return $this->belongsTo(Kriteria::class);

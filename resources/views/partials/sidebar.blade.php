@@ -22,7 +22,7 @@
             <p class="text-blue-200 text-xs uppercase tracking-wider font-semibold mb-3 px-3">Main Menu</p>
 
             <!-- Dashboard -->
-            <a href="#"
+            <a href="{{ route('admin.dashboard') }}"
                class="nav-item flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-300 group text-gray-100 hover:text-white">
                 <i class="fas fa-chart-pie w-5 text-blue-300 group-hover:text-white transition-colors"></i>
                 <span class="font-medium text-sm">Dashboard</span>
@@ -32,7 +32,7 @@
             <p class="text-blue-200 text-xs uppercase tracking-wider font-semibold mt-6 mb-3 px-3">Master Data</p>
 
             <!-- Data Wisata -->
-            <a href="#"
+            <a href="{{ route('admin.wisata.index') }}"
                class="nav-item flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-300 group text-gray-100 hover:text-white">
                 <i class="fas fa-umbrella-beach w-5 text-blue-300 group-hover:text-white transition-colors"></i>
                 <span class="text-sm">Data Wisata</span>
@@ -40,7 +40,7 @@
             </a>
 
             <!-- Data Kriteria -->
-            <a href="#"
+            <a href="{{ route('admin.kriteria.index') }}"
                class="nav-item flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-300 group text-gray-100 hover:text-white">
                 <i class="fas fa-sliders-h w-5 text-blue-300 group-hover:text-white transition-colors"></i>
                 <span class="text-sm">Data Kriteria</span>
@@ -48,35 +48,18 @@
             </a>
 
             <!-- Penilaian -->
-            <a href="#"
+            <a href="{{ route('admin.penilaian.index') }}"
                class="nav-item flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-300 group text-gray-100 hover:text-white">
                 <i class="fas fa-star w-5 text-blue-300 group-hover:text-white transition-colors"></i>
                 <span class="text-sm">Penilaian</span>
                 <i class="fas fa-chevron-right ml-auto text-xs opacity-0 group-hover:opacity-100 transition-all"></i>
             </a>
 
-            <p class="text-blue-200 text-xs uppercase tracking-wider font-semibold mt-6 mb-3 px-3">SPK SAW</p>
-
-            <!-- Perhitungan SAW -->
-            <a href="#"
-               class="nav-item flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-300 group text-gray-100 hover:text-white">
-                <i class="fas fa-calculator w-5 text-blue-300 group-hover:text-white transition-colors"></i>
-                <span class="text-sm">Perhitungan SAW</span>
-                <i class="fas fa-chevron-right ml-auto text-xs opacity-0 group-hover:opacity-100 transition-all"></i>
-            </a>
-
-            <!-- Ranking Wisata -->
-            <a href="#"
-               class="nav-item flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-300 group text-gray-100 hover:text-white">
-                <i class="fas fa-trophy w-5 text-blue-300 group-hover:text-white transition-colors"></i>
-                <span class="text-sm">Ranking Wisata</span>
-                <i class="fas fa-chevron-right ml-auto text-xs opacity-0 group-hover:opacity-100 transition-all"></i>
-            </a>
         </nav>
 
         <!-- Logout Button -->
         <div class="p-4 border-t border-blue-500/30">
-            <form method="POST" action="#">
+            <form method="POST" action="{{ route('logout') }}">
                 @csrf
                 <button type="submit" class="w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-red-200 hover:text-white hover:bg-red-500/20 transition-all duration-300 group">
                     <i class="fas fa-sign-out-alt w-5 group-hover:rotate-180 transition-transform"></i>
