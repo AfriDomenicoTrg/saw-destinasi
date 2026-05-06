@@ -1,6 +1,5 @@
-
-
 <?php
+// database/migrations/xxxx_xx_xx_000003_create_kriteria_table.php
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -12,10 +11,10 @@ return new class extends Migration
     {
         Schema::create('kriterias', function (Blueprint $table) {
             $table->id();
-            $table->string('nama_kriteria');
-            $table->string('satuan')->nullable(); // contoh: "Rupiah", "Bintang", "Km"
-            $table->enum('atribut', ['benefit', 'cost']);
-            $table->boolean('is_active')->default(true);
+            $table->string('kode_kriteria')->unique(); // C1, C2, C3
+            $table->string('nama_kriteria'); // Harga Tiket, Jarak, Fasilitas
+            $table->enum('tipe', ['benefit', 'cost']);
+            $table->float('bobot'); // bobot dalam bentuk desimal (0.25, 0.30)
             $table->timestamps();
         });
     }
