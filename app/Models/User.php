@@ -10,11 +10,6 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
     protected $fillable = [
         'name',
         'email',
@@ -22,43 +17,32 @@ class User extends Authenticatable
         'role',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-        'password' => 'hashed',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'email_verified_at' => 'datetime',
+            'password' => 'hashed',
+        ];
+    }
 
     /**
-     * Check if user is admin.
-     *
-     * @return bool
+     * Check if user is admin
      */
-    public function isAdmin()
+    public function isAdmin(): bool
     {
         return $this->role === 'admin';
     }
 
     /**
-     * Get user role in Indonesian.
-     *
-     * @return string
+     * Check if user is regular user
      */
-    public function getRoleIndonesianAttribute()
+    public function isUser(): bool
     {
-        return $this->role === 'admin' ? 'Administrator' : 'Pengguna';
+        return $this->role === 'user';
     }
 }
