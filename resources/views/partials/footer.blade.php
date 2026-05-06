@@ -20,7 +20,7 @@
             </div>
 
             <div class="text-sm text-gray-400">
-                Version 2.0.0
+                Version 1.0.0
             </div>
         </div>
     </div>

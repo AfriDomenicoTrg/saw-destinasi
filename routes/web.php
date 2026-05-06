@@ -1,7 +1,9 @@
 <?php
-use App\Http\Controllers\AdminDashboardController;
+
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\WisataController;
 
 Route::get('/', function () {
-    return view('layouts.app');
+    return view('auth.login');
 });
+
